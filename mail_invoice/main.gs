@@ -58,11 +58,11 @@ function createNewMonthlySheet() {
     const newSheet = formatSheet.copyTo(ss).setName(sheetName);
 
     // 日付の設定
-    const nextMonthLast = new Date(year, month + 1, 0);    // 翌月末
-    const afterNextMonthLast = new Date(year, month + 2, 0); // 翌々月末
+    const thisMonthLast = new Date(year, month, 0);    // 当月末
+    const nextMonthLast = new Date(year, month + 1, 0); // 翌月末
 
-    newSheet.getRange("J13").setValue(Utilities.formatDate(nextMonthLast, Session.getScriptTimeZone(), "yyyy/MM/dd"));
-    newSheet.getRange("J14").setValue(Utilities.formatDate(afterNextMonthLast, Session.getScriptTimeZone(), "yyyy/MM/dd"));
+    newSheet.getRange("J13").setValue(Utilities.formatDate(thisMonthLast, Session.getScriptTimeZone(), "yyyy/MM/dd"));
+    newSheet.getRange("J14").setValue(Utilities.formatDate(nextMonthLast, Session.getScriptTimeZone(), "yyyy/MM/dd"));
 
     Logger.log(`新しいシートを作成しました: ${sheetName}`);
     showAlert(`新しいシート「${sheetName}」を作成しました。`);
