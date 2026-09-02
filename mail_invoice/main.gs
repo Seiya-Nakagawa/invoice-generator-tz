@@ -61,8 +61,8 @@ function createNewMonthlySheet() {
     const thisMonthLast = new Date(year, month, 0);    // 当月末
     const nextMonthLast = new Date(year, month + 1, 0); // 翌月末
 
-    newSheet.getRange("J13").setValue(Utilities.formatDate(thisMonthLast, Session.getScriptTimeZone(), "yyyy/MM/dd"));
-    newSheet.getRange("J14").setValue(Utilities.formatDate(nextMonthLast, Session.getScriptTimeZone(), "yyyy/MM/dd"));
+    newSheet.getRange("K13").setValue(Utilities.formatDate(thisMonthLast, Session.getScriptTimeZone(), "yyyy/MM/dd"));
+    newSheet.getRange("K14").setValue(Utilities.formatDate(nextMonthLast, Session.getScriptTimeZone(), "yyyy/MM/dd"));
 
     Logger.log(`新しいシートを作成しました: ${sheetName}`);
     showAlert(`新しいシート「${sheetName}」を作成しました。`);
@@ -112,12 +112,12 @@ function mainProcessInvoice() {
     // 4. PDF作成
     Logger.log(`${year}年${month}月分のPDFを作成中...`);
 
-    // 同名の既存ファイルをゴミ箱へ（重複防止とリンクの混乱回避）
+    // 同名の既存ファイルがある場合は上書き作成せずスキップする
     const existingFiles = folder.getFilesByName(pdfFileName);
-    while (existingFiles.hasNext()) {
-      const file = existingFiles.next();
-      Logger.log(`既存のファイルをゴミ箱に移動しました: ${file.getName()}`);
-      file.setTrashed(true);
+    if (existingFiles.hasNext()) {
+      Logger.log(`既に同名のファイルが存在するためスキップします: ${pdfFileName}`);
+      showAlert(`既に「${pdfFileName}」が存在するため、処理をスキップしました。`);
+      return;
     }
 
     const pdfFile = exportSheetAsPDF(ss, targetSheet, folder, pdfFileName);
